@@ -85,7 +85,11 @@ passport.deserializeUser(User.deserializeUser());//to remove after session ends
 app.use((req,res,next)=>{
   res.locals.success=req.flash("success");
   res.locals.error=req.flash("error");
-  res.locals.currUser=req.user;
+  // After your session middleware and before your routes
+  app.use((req, res, next) => {
+      res.locals.currUser = req.user || null;
+      next();
+  });
   next();
 });
 
